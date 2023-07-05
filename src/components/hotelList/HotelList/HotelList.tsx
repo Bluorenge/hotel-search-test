@@ -1,31 +1,22 @@
-import { Box, Button, ButtonGroup, VStack } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, VStack, Text } from '@chakra-ui/react';
 import { HotelCard } from '../HotelCard/HotelCard';
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
+import { HotelsStoreCtx } from '../../../store/HotelsStoreProvider';
 
-export const HotelList = ({ hotels }: { hotels: any }) => {
-    const [currentPage, setCurrentPage] = useState(1);
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [hotels]);
-
-    const itemsPerPage = 3;
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentPageHotels = hotels.slice(startIndex, endIndex);
-    const pageCount = Math.ceil(hotels.length / 3);
+export const HotelList = () => {
+    const { page, totalPage, hotels, onPaginate } = useContext(HotelsStoreCtx);
 
     const renderPageButtons = () => {
         const buttons = [];
 
-        for (let page = 1; page <= pageCount; page++) {
+        for (let i = 1; i <= totalPage; i++) {
             buttons.push(
                 <Button
-                    key={page}
-                    colorScheme={currentPage === page ? 'blue' : 'gray'}
-                    onClick={() => setCurrentPage(page)}
+                    key={i}
+                    colorScheme={page === i ? 'blue' : 'gray'}
+                    onClick={() => onPaginate(i)}
                 >
-                    {page}
+                    {i}
                 </Button>
             );
         }
@@ -33,22 +24,24 @@ export const HotelList = ({ hotels }: { hotels: any }) => {
         return buttons;
     };
 
-    return (
-        <>
-            <VStack gap={8}>
-                {currentPageHotels.map((hotel: any) => (
-                    <HotelCard
-                        key={hotel.name}
-                        hotelData={hotel}
-                    />
-                ))}
+    if (!hotels.length) {
+        return <Text>Записей не найдено</Text>;
+    }
 
-                {pageCount > 1 ? (
-                    <Box>
-                        <ButtonGroup>{renderPageButtons()}</ButtonGroup>
-                    </Box>
-                ) : null}
-            </VStack>
-        </>
+    return (
+        <VStack gap={8}>
+            {hotels.map((hotel) => (
+                <HotelCard
+                    key={hotel.name}
+                    hotelData={hotel}
+                />
+            ))}
+
+            {totalPage > 1 ? (
+                <Box>
+                    <ButtonGroup>{renderPageButtons()}</ButtonGroup>
+                </Box>
+            ) : null}
+        </VStack>
     );
 };

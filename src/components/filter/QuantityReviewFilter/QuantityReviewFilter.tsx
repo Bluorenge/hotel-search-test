@@ -1,6 +1,10 @@
 import { Box, Text, Input } from '@chakra-ui/react';
+import { FilterProps } from '../types';
 
-export const QuantityReviewFilter = ({ value, onFilterChange }: FilterProps) => {
+export const QuantityReviewFilter = ({
+    value,
+    onFilterChange,
+}: FilterProps<'quantityReview'>) => {
     const handleInputChange = (event: any) => {
         const value = event.target.value;
         const sanitizedValue = value.replace(/[^-0-9]/g, '');

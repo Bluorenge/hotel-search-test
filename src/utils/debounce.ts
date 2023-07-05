@@ -1,11 +1,11 @@
-export const debounce = (
-    func: (...args: any[]) => void,
+export const debounce = <T extends (...args: any[]) => void>(
+    func: T,
     wait: number | undefined,
     immediate?: boolean
 ) => {
     let timeout: number | undefined;
 
-    return (...args: any[]) => {
+    return ((...args: any[]) => {
         const callNow = immediate && !timeout;
         clearTimeout(timeout);
         timeout = setTimeout(() => {
@@ -18,5 +18,5 @@ export const debounce = (
         if (callNow) {
             func(...args);
         }
-    };
+    }) as T;
 };

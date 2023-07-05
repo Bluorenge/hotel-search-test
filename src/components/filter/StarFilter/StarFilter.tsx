@@ -1,4 +1,5 @@
 import { CheckboxGroup, VStack, Checkbox, Text } from '@chakra-ui/react';
+import { FilterProps } from '../types';
 
 export enum STAR_RATING {
     ONE_STAR = '1',
@@ -8,7 +9,10 @@ export enum STAR_RATING {
     FIVE_STAR = '5',
 }
 
-export const StarFilter = ({ value, onFilterChange }: FilterProps) => {
+export const StarFilter = ({
+    value,
+    onFilterChange,
+}: FilterProps<'starRating'>) => {
     const handleCheckboxChange = (selected: any) => {
         onFilterChange('starRating', selected);
     };

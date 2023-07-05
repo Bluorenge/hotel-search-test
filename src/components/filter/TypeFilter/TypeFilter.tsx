@@ -1,6 +1,7 @@
 import { Text } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import Select from 'react-select';
+import { FilterProps } from '../types';
 
 export enum TYPE_HOUSING {
     APARTAMENT = 'apartament',
@@ -12,7 +13,7 @@ export const TYPE_HOUSING_RU = {
     [TYPE_HOUSING.HOTEL]: 'Отель',
 };
 
-export const TypeFilter = ({ value, onFilterChange }: FilterProps) => {
+export const TypeFilter = ({ value, onFilterChange }: FilterProps<'types'>) => {
     const selectData = useMemo(
         () =>
             Object.values(TYPE_HOUSING).map((type) => ({

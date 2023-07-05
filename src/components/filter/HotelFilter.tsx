@@ -1,120 +1,72 @@
-import { useMemo, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button, HStack } from '@chakra-ui/react';
 
 import { CountriesFilter } from './CountriesFilter/CountriesFilter';
 import { PriceFilter } from './PriceFilter/PriceFilter';
 import { QuantityReviewFilter } from './QuantityReviewFilter/QuantityReviewFilter';
 import { STAR_RATING, StarFilter } from './StarFilter/StarFilter';
+import { FilterData, HotelsStoreCtx } from '../../store/HotelsStoreProvider';
 import {
     TYPE_HOUSING,
     TYPE_HOUSING_RU,
     TypeFilter
 } from './TypeFilter/TypeFilter';
 
-const initialFilter: {
-    countries: TObj[];
-    types: any[];
-    starRating: string[];
-    quantityReview: string | null;
-    priceUpTo: string | null;
-} = {
+const initialFilter: FilterData = {
     countries: [],
     types: Object.values(TYPE_HOUSING).map((type) => ({
         value: type,
         label: TYPE_HOUSING_RU[type],
     })),
     starRating: Object.values(STAR_RATING),
-    quantityReview: null,
-    priceUpTo: null,
+    quantityReview: 0,
+    priceUpTo: 0,
 };
 
-export const HotelFilter = ({
-    hotels,
-    onFilterChangeClick,
-}: {
-    hotels: any[];
-    onFilterChangeClick: any;
-}) => {
-    const [filterSettings, setFilterSettings] = useState(initialFilter);
-    const maxHotelPrice = useMemo(
-        () =>
-            hotels.reduce((acc, item) => {
-                if (item.min_price > acc) {
-                    acc = item.min_price;
-                }
+export const HotelFilter = () => {
+    const { maxHotelPrice, onFilter } = useContext(HotelsStoreCtx);
+    const [filters, setFilters] = useState<FilterData>(initialFilter);
 
-                return acc;
-            }, 0),
-        [hotels]
-    );
-
-    const handleFilterChange = (name: string, value: any) => {
-        setFilterSettings({ ...filterSettings, [name]: value });
+    const handleFilterChange = <T extends keyof FilterData>(
+        name: T,
+        value: FilterData[T]
+    ) => {
+        setFilters({ ...filters, [name]: value });
     };
 
-    const filteredData = hotels.filter((item) => {
-        const isEqualCountry = filterSettings.countries.find(
-            (country) => country.label === item.country
-        );
-        const isEqualType = filterSettings.types.find(
-            (type) => type.label === item.type
-        );
-        const isEqualStarRating = filterSettings.starRating.find(
-            (star) => +star === item.stars
-        );
-        const isQuntityReviewMore =
-            filterSettings.quantityReview &&
-            filterSettings.quantityReview >= item.reviews_amount;
-        const isPriceMore =
-            filterSettings.priceUpTo &&
-            filterSettings.priceUpTo <= item.min_price;
-
-        if (
-            (filterSettings.countries.length !== 0 && !isEqualCountry) ||
-            !isEqualType ||
-            !isEqualStarRating ||
-            isQuntityReviewMore ||
-            isPriceMore
-        ) {
-            return false;
-        }
-
-        return true;
-    });
-
     const handleClearFilterClick = () => {
-        setFilterSettings(initialFilter);
-        onFilterChangeClick(hotels);
+        onFilter(null);
+        setFilters(initialFilter);
     };
 
     return (
         <>
             <CountriesFilter
-                value={filterSettings.countries}
+                value={filters.countries}
                 onFilterChange={handleFilterChange}
             />
             <TypeFilter
-                value={filterSettings.types}
+                value={filters.types}
                 onFilterChange={handleFilterChange}
             />
             <StarFilter
-                value={filterSettings.starRating}
+                value={filters.starRating}
                 onFilterChange={handleFilterChange}
             />
             <QuantityReviewFilter
-                value={filterSettings.quantityReview}
+                value={filters.quantityReview}
                 onFilterChange={handleFilterChange}
             />
             <PriceFilter
                 maxPrice={maxHotelPrice}
-                value={filterSettings.priceUpTo}
+                value={filters.priceUpTo || maxHotelPrice}
                 onFilterChange={handleFilterChange}
             />
 
             <HStack>
                 <Button
                     colorScheme="teal"
-                    onClick={() => onFilterChangeClick(filteredData)}
+                    onClick={() => onFilter(filters)}
                 >
                     Применить фильтр
                 </Button>

@@ -1,17 +1,9 @@
-import { Container, Flex, VStack, Box, Text } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Container, Flex, VStack, Box } from '@chakra-ui/react';
 
 import { HotelFilter } from '../components/filter/HotelFilter';
 import { HotelList } from '../components/hotelList/HotelList/HotelList';
-import hotelData from './hotelsMock.json';
 
 export const HotelFilterPage = () => {
-    const [hotelList, setHotelList] = useState(hotelData?.hotels);
-
-    const handleSetHotelList = (list: any) => {
-        setHotelList(list);
-    };
-
     return (
         <Container
             centerContent
@@ -27,18 +19,11 @@ export const HotelFilterPage = () => {
                     spacing={8}
                     align="flex-start"
                 >
-                    <HotelFilter
-                        hotels={hotelData?.hotels}
-                        onFilterChangeClick={handleSetHotelList}
-                    />
+                    <HotelFilter />
                 </VStack>
 
                 <Box flex="9">
-                    {hotelList.length !== 0 ? (
-                        <HotelList hotels={hotelList} />
-                    ) : (
-                        <Text>Записей не найдено</Text>
-                    )}
+                    <HotelList />
                 </Box>
             </Flex>
         </Container>

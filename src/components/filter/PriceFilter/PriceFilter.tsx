@@ -8,21 +8,19 @@ import {
     RangeSliderTrack,
     Box
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 import { debounce } from '../../../utils/debounce';
+import { FilterProps } from '../types';
 
 export const PriceFilter = ({
     value,
     maxPrice,
     onFilterChange,
-}: {
-    value: string | null;
+}: FilterProps<'priceUpTo'> & {
     maxPrice: number;
-    onFilterChange: any;
 }) => {
     const handleInputChange = (event: any) => {
         const inputValueChangeEvent = event[1];
-        debounce(onFilterChange('priceUpTo', inputValueChangeEvent), 300);
+        debounce(() => onFilterChange('priceUpTo', inputValueChangeEvent), 300);
     };
 
     return (
@@ -34,7 +32,7 @@ export const PriceFilter = ({
                 max={maxPrice}
                 step={30}
                 aria-label={['min', 'max']}
-                value={[0, Number(value ?? maxPrice)]}
+                value={[0, value]}
                 onChange={handleInputChange}
             >
                 <RangeSliderTrack>
@@ -46,7 +44,7 @@ export const PriceFilter = ({
             <HStack>
                 <Input
                     readOnly
-                    value={value ?? maxPrice}
+                    value={value}
                 />
             </HStack>
         </Box>

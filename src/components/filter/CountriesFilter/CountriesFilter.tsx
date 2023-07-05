@@ -3,8 +3,9 @@ import { Text } from '@chakra-ui/react';
 import Select from 'react-select';
 
 import countriesList from './countriesList.json';
+import { FilterProps } from '../types';
 
-export const CountriesFilter = ({ value, onFilterChange }: FilterProps) => {
+export const CountriesFilter = ({ value, onFilterChange }: FilterProps<'countries'>) => {
     const selectData = useMemo(
         () =>
             countriesList.map((country) => ({
