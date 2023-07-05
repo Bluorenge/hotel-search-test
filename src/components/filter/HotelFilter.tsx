@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { VStack, Button } from '@chakra-ui/react';
+import { VStack, Button, HStack } from '@chakra-ui/react';
 
 import { CountriesFilter } from './CountriesFilter/CountriesFilter';
 import { PriceFilter } from './PriceFilter/PriceFilter';
@@ -104,15 +104,18 @@ export const HotelFilter = ({
                 onFilterChange={handleFilterChange}
             />
 
-            <VStack>
-                <Button onClick={() => onFilterChangeClick(filteredData)}>
+            <HStack>
+                <Button
+                    colorScheme="teal"
+                    onClick={() => onFilterChangeClick(filteredData)}
+                >
                     Применить фильтр
                 </Button>
 
                 <Button onClick={handleClearFilterClick}>
                     Очистить фильтр
                 </Button>
-            </VStack>
+            </HStack>
         </>
     );
 };

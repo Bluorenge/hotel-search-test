@@ -51,7 +51,7 @@ export const PriceFilter = ({
             <HStack>
                 <Input
                     readOnly
-                    value={value === null ? '' : inputValue}
+                    value={inputValue}
                 />
             </HStack>
         </Box>
