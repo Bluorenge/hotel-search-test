@@ -20,13 +20,8 @@ export const PriceFilter = ({
     maxPrice: number;
     onFilterChange: any;
 }) => {
-    const [inputValue, setInputValue] = useState<string | number>(maxPrice);
-
-    useEffect(() => setInputValue(value ?? maxPrice), [maxPrice, value]);
-
     const handleInputChange = (event: any) => {
         const inputValueChangeEvent = event[1];
-        setInputValue(inputValueChangeEvent);
         debounce(onFilterChange('priceUpTo', inputValueChangeEvent), 300);
     };
 
@@ -39,7 +34,7 @@ export const PriceFilter = ({
                 max={maxPrice}
                 step={30}
                 aria-label={['min', 'max']}
-                value={[0, +inputValue]}
+                value={[0, Number(value ?? maxPrice)]}
                 onChange={handleInputChange}
             >
                 <RangeSliderTrack>
@@ -51,7 +46,7 @@ export const PriceFilter = ({
             <HStack>
                 <Input
                     readOnly
-                    value={inputValue}
+                    value={value ?? maxPrice}
                 />
             </HStack>
         </Box>
