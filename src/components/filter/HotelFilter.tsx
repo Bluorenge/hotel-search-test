@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { VStack, Button, HStack } from '@chakra-ui/react';
+import { Button, HStack } from '@chakra-ui/react';
 
 import { CountriesFilter } from './CountriesFilter/CountriesFilter';
 import { PriceFilter } from './PriceFilter/PriceFilter';
@@ -37,7 +37,14 @@ export const HotelFilter = ({
 }) => {
     const [filterSettings, setFilterSettings] = useState(initialFilter);
     const maxHotelPrice = useMemo(
-        () => hotels.sort((a, b) => b.min_price - a.min_price)[0].min_price,
+        () =>
+            hotels.reduce((acc, item) => {
+                if (item.min_price > acc) {
+                    acc = item.min_price;
+                }
+
+                return acc;
+            }, 0),
         [hotels]
     );
 
